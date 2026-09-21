@@ -1,0 +1,20 @@
+{
+  "port": "COM12",
+  "configuration": "",
+  "output": "build",
+  "board": "arduino:avr:leonardo",
+  "programmer": "arduinoasisp",
+  "useProgrammer": false,
+  "optimize_for_debug": false,
+  "configurationRequired": false,
+  "compile_profile": "",
+  "monitorPortSettings": {
+    "port": "COM12",
+    "baudRate": 115200,
+    "lineEnding": "\r\n",
+    "dataBits": 8,
+    "parity": "none",
+    "stopBits": "one"
+  },
+  "schemaVersion": 1
+}
