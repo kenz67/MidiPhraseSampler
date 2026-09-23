@@ -1,8 +1,16 @@
 #include <MidiController.h>
+#include "src/LooperStateButton.h"
 
 ButtonBase* buttons[] = {
     //new ButtonNote(13, 0, midiNote[Gb][4]),
-    new ButtonControl(13, 0, 30, 50, 31, 60, 1000),
+    new LooperStateButton(
+        13,    //pin
+        0,     //channel
+        14, 0, //ccNumber1, value1  (Record)
+        15, 0, //ccNumber2, value2  (Play/Pause)
+        16, 0, //longPressccNumber, longPressValue  (Clear)
+        1000   //longPressDurationMs
+    ),
     new ButtonLatch(4, 1, 29),
 };
 
