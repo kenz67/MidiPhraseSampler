@@ -7,30 +7,31 @@ LooperStateButton::LooperStateButton(
     byte longPressValue, unsigned long longPressDurationMs)
     : ButtonControl(pin, channel, ccNumber1, value1, longPressccNumber,
                     longPressValue, longPressDurationMs),
-      _channel(channel),
-      _ccNumber1(ccNumber1),
-      _value1(value1),
-      _ccNumber2(ccNumber2),
-      _value2(value2),
-      _longPressccNumber(longPressccNumber),
-    _longPressValue(longPressValue) {}
+        _channel(channel),
+        _ccNumber1(ccNumber1),
+        _value1(value1),
+        _ccNumber2(ccNumber2),
+        _value2(value2),
+        _longPressccNumber(longPressccNumber),
+        _longPressValue(longPressValue) {}
 
 void LooperStateButton::onButtonPress() {
     switch (_state) {
     case LooperStates::Empty:
-        sendControlMessage(_ccNumber1, _value1);
+        sendControlMessage(_ccNumber1, 127);
         _state = LooperStates::Recording;
         break;
     case LooperStates::Recording:
-        sendControlMessage(_ccNumber2, _value2);
+        sendControlMessage(_ccNumber1, 0);
+        sendControlMessage(_ccNumber2, 127);
         _state = LooperStates::Playing;
         break;
     case LooperStates::Playing:
-        sendControlMessage(_ccNumber2, _value2);
+        sendControlMessage(_ccNumber2, 0);
         _state = LooperStates::Paused;
         break;
     case LooperStates::Paused:
-        sendControlMessage(_ccNumber2, _value2);
+        sendControlMessage(_ccNumber2, 127);
         _state = LooperStates::Playing;
         break;
     }
@@ -39,9 +40,9 @@ void LooperStateButton::onButtonPress() {
 }
 
 void LooperStateButton::onLongPress() {
-    midiEventPacket_t message = {
-        0x0B, uint8_t(0xB0 | _channel), _longPressccNumber, _longPressValue};
-    sendMidiMsg(message);
+    sendControlMessage(_longPressccNumber, _longPressValue);
+    sendControlMessage(_ccNumber1, 0);
+    sendControlMessage(_ccNumber2, 0);
     _state = LooperStates::Empty;
     Debug::printNameValuePair("\033[32mState set to\033[0m", stateNames[static_cast<int>(_state)]);
 }
