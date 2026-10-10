@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default values
-TARGET_NAME="Arduino"
+TARGET_NAME="Midi"  # Default target device keyword
 CYAN='\x1b[36m'
 GREEN='\x1b[32m'
 MAGENTA='\x1b[35m'  
@@ -65,18 +65,17 @@ while [[ $# -gt 0 ]]; do
 done
 
 while true; do
-    PORT=$(aseqdump -l | grep -i "$TARGET_NAME" | awk 'NR==1 {print $1}')
+    PORTS=$(aseqdump -l | -l | grep -i "$TARGET_NAME" | awk '$1 != "Port" { ports = ports separator $1; separator = "," } END { print ports }')
 
-    if [ -n "$PORT" ] && [ "$PORT" != "Port" ]; then
-        echo -e "${YELLOW}--> Monitoring MIDI on target '$TARGET_NAME' (port $PORT)...${RESET}"
+    if [ -n "$PORTS" ]; then
+        echo -e "${YELLOW}--> Monitoring MIDI on target '$TARGET_NAME' (ports $PORTS)...${RESET}"
         
         (
-            aseqdump -p "$PORT" 2>&1 | awk -Winteractive \
+            aseqdump -p "$PORTS" 2>&1 | awk -Winteractive \
                 -v c="$CYAN" -v g="$GREEN" -v m="$MAGENTA" -v y="$YELLOW" -v x="$RESET" '
                 /Port unsubscribed/ { 
                     print y $0 x; 
                     fflush(); 
-                    system("pkill -f \"aseqdump -p\""); 
                     exit 
                 }
                 /Control change/    { print c $0 x; next }

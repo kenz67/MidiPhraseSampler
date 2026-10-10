@@ -1,0 +1,17 @@
+default_profile: kenz-ubuntu
+
+profiles:
+  kenz-ubuntu:
+    fqbn: "arduino:avr:leonardo"
+    
+    port: /dev/ttyACM0
+
+    build_properties:
+      - compiler.cpp.extra_flags=-D MY_CUSTOM_LEONARDO_BUILD -D DEBUG_LEVEL=1
+      - build.usb_product="Midi Phrase Sampler"
+    
+    # This instructs arduino-cli to find, build, and link everything automatically
+    libraries:
+       - dir: /home/kenz/Documents/Arduino/libraries/MidiController
+       - dir: /home/kenz/Documents/Arduino/libraries/MIDIUSB
+       - dir: /home/kenz/Documents/Arduino/libraries/LiquidCrystal_I2C
