@@ -9,9 +9,12 @@ profiles:
     build_properties:
       - compiler.cpp.extra_flags=-D MY_CUSTOM_LEONARDO_BUILD -D DEBUG_LEVEL=1
       - build.usb_product="Midi Phrase Sampler"
+      - build.usb_manufacturer="\"Kenz Labs\""
     
     # This instructs arduino-cli to find, build, and link everything automatically
     libraries:
        - dir: /home/kenz/Documents/Arduino/libraries/MidiController
-       - dir: /home/kenz/Documents/Arduino/libraries/MIDIUSB
-       - dir: /home/kenz/Documents/Arduino/libraries/LiquidCrystal_I2C
+       - MIDIUSB (1.0.5)
+       - LiquidCrystal_I2C (2.0.0)
+       #- dir: /home/kenz/Documents/Arduino/libraries/MIDIUSB
+       #- dir: /home/kenz/Documents/Arduino/libraries/LiquidCrystal_I2C
