@@ -25,6 +25,11 @@ void LooperStateButton::init() {
     updateStateLeds();
 }
 
+void LooperStateButton::update() {
+    ButtonControl::update();
+    updateStateLeds();
+}
+
 void LooperStateButton::onButtonPress() {
     switch (_state) {
     case LooperStates::Empty:
@@ -38,6 +43,8 @@ void LooperStateButton::onButtonPress() {
         break;
     case LooperStates::Playing:
         sendControlMessage(_ccNumber2, 0);
+        _lastBlinkTime = millis();
+        _pausedLedOn = true;
         _state = LooperStates::Paused;
         break;
     case LooperStates::Paused:
@@ -61,7 +68,16 @@ void LooperStateButton::onLongPress() {
 
 void LooperStateButton::updateStateLeds() {
     digitalWrite(_recordingLedPin, _state == LooperStates::Recording ? HIGH : LOW);
-    digitalWrite(_playingLedPin, _state == LooperStates::Playing ? HIGH : LOW);
+
+    if (_state == LooperStates::Paused) {
+        if (millis() - _lastBlinkTime >= 500UL) {
+            _lastBlinkTime = millis();
+            _pausedLedOn = !_pausedLedOn;
+        }
+        digitalWrite(_playingLedPin, _pausedLedOn ? HIGH : LOW);
+    } else {
+        digitalWrite(_playingLedPin, _state == LooperStates::Playing ? HIGH : LOW);
+    }
 }
 
 void LooperStateButton::sendControlMessage(byte ccNumber, byte value) {

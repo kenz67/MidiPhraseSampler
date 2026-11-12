@@ -14,6 +14,8 @@ public:
                       byte playingLedPin = 12
                       );
 
+    void update() override;
+
 protected:
     void init() override;
     void onButtonPress() override;
@@ -35,6 +37,8 @@ private:
     byte _longPressValue;
     byte _recordingLedPin;
     byte _playingLedPin;
+    unsigned long _lastBlinkTime = 0;
+    bool _pausedLedOn = true;
 };
 
 #endif
