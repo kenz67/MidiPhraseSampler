@@ -1,10 +1,12 @@
+#include <Arduino.h>
 #include "LooperStateButton.h"
 #include "Debug.h"
 
 LooperStateButton::LooperStateButton(
     byte pin, byte channel, byte ccNumber1, byte value1,
     byte ccNumber2, byte value2, byte longPressccNumber,
-    byte longPressValue, unsigned long longPressDurationMs)
+    byte longPressValue, unsigned long longPressDurationMs,
+    byte recordingLedPin, byte playingLedPin)
     : ButtonControl(pin, channel, ccNumber1, value1, longPressccNumber,
                     longPressValue, longPressDurationMs),
         _channel(channel),
@@ -13,7 +15,15 @@ LooperStateButton::LooperStateButton(
         _ccNumber2(ccNumber2),
         _value2(value2),
         _longPressccNumber(longPressccNumber),
-        _longPressValue(longPressValue) {}
+        _longPressValue(longPressValue),
+        _recordingLedPin(recordingLedPin),
+        _playingLedPin(playingLedPin) {}
+
+void LooperStateButton::init() {
+    pinMode(_recordingLedPin, OUTPUT);
+    pinMode(_playingLedPin, OUTPUT);
+    updateStateLeds();
+}
 
 void LooperStateButton::onButtonPress() {
     switch (_state) {
@@ -36,6 +46,7 @@ void LooperStateButton::onButtonPress() {
         break;
     }
 
+    updateStateLeds();
     Debug::printNameValuePair("\033[32mState set to\033[0m", stateNames[static_cast<int>(_state)]);
 }
 
@@ -44,7 +55,13 @@ void LooperStateButton::onLongPress() {
     sendControlMessage(_ccNumber1, 0);
     sendControlMessage(_ccNumber2, 0);
     _state = LooperStates::Empty;
+    updateStateLeds();
     Debug::printNameValuePair("\033[32mState set to\033[0m", stateNames[static_cast<int>(_state)]);
+}
+
+void LooperStateButton::updateStateLeds() {
+    digitalWrite(_recordingLedPin, _state == LooperStates::Recording ? HIGH : LOW);
+    digitalWrite(_playingLedPin, _state == LooperStates::Playing ? HIGH : LOW);
 }
 
 void LooperStateButton::sendControlMessage(byte ccNumber, byte value) {

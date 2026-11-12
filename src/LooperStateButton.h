@@ -9,15 +9,19 @@ public:
     LooperStateButton(byte pin, byte channel, byte ccNumber1, byte value1,
                       byte ccNumber2 = 0, byte value2 = 0,
                       byte longPressccNumber = 0, byte longPressValue = 0,
-                      unsigned long longPressDurationMs = 0
+                      unsigned long longPressDurationMs = 0,
+                      byte recordingLedPin = 11,
+                      byte playingLedPin = 12
                       );
 
 protected:
+    void init() override;
     void onButtonPress() override;
     void onLongPress() override;
 
 private:
     void sendControlMessage(byte ccNumber, byte value);
+    void updateStateLeds();
     void sendLongPressMessage();
     void handleButtonPress();
 
@@ -29,6 +33,8 @@ private:
     byte _value2;
     byte _longPressccNumber;
     byte _longPressValue;
+    byte _recordingLedPin;
+    byte _playingLedPin;
 };
 
 #endif

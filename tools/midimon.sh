@@ -64,8 +64,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+echo $TARGET_NAME
 while true; do
-    PORTS=$(aseqdump -l | -l | grep -i "$TARGET_NAME" | awk '$1 != "Port" { ports = ports separator $1; separator = "," } END { print ports }')
+    PORTS=$(aseqdump -l | grep -i "$TARGET_NAME" | awk '$1 != "Port" { ports = ports separator $1; separator = "," } END { print ports }')
 
     if [ -n "$PORTS" ]; then
         echo -e "${YELLOW}--> Monitoring MIDI on target '$TARGET_NAME' (ports $PORTS)...${RESET}"

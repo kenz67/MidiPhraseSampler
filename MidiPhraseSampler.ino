@@ -9,7 +9,9 @@ ButtonBase* buttons[] = {
         14, 0, //ccNumber1, value1  (Record)
         15, 0, //ccNumber2, value2  (Play/Pause)
         16, 0, //longPressccNumber, longPressValue  (Clear)
-        1000   //longPressDurationMs
+        1000,  //longPressDurationMs
+        11,    //recordingLedPin
+        12     //playingLedPin
     ),
     new ButtonLatch(4, 1, 29),
 };
