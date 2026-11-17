@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default values
-TARGET_NAME="Midi"  # Default target device keyword
+TARGET_NAME="Midi Phrase Sampler"  # Default target device keyword
 CYAN='\x1b[36m'
 GREEN='\x1b[32m'
 MAGENTA='\x1b[35m'  
